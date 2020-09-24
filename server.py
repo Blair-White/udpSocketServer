@@ -38,11 +38,12 @@ def cleanClients(sock):
             print('Dropped Client: ', c)
             message = {"cmd": 2, "Dropped Client ":{"id":str(addr)} }
             m = json.dumps(message)
+            for cl in list(clients.keys()):
+               sock.sendto(bytes(m,'utf8'), (c[0],c[1]))
             clients_lock.acquire()
             del clients[c]
             clients_lock.release()
-            for cl in list(clients.keys()):
-               sock.sendto(bytes(m,'utf8'), (cl[0],cl[1]))
+           
 
       time.sleep(1)
 
