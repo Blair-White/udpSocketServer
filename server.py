@@ -36,10 +36,10 @@ def cleanClients(sock):
       for c in list(clients.keys()):
          if (datetime.now() - clients[c]['lastBeat']).total_seconds() > 5:
             print('Dropped Client: ', c)
-            message = {"cmd": 2, "Dropped Client ":{"id":str(addr)} }
+            message = {"cmd": 2, "Dropped Client ":{"id":str(c)} }
             m = json.dumps(message)
             for cl in list(clients.keys()):
-               sock.sendto(bytes(m,'utf8'), (c[0],c[1]))
+               sock.sendto(bytes(m,'utf8'), (cl[0],cl[1]))
             clients_lock.acquire()
             del clients[c]
             clients_lock.release()
