@@ -26,7 +26,7 @@ def connectionLoop(sock):
             clients[addr]['color'] = 0
             for c in clients:
                for d in clients:
-                  message = {"cmd": 0,"player":{"id":str([clients][d])}, "color": clients[d]['color']}
+                  message = {"cmd": 0,"player":{"id":str(d)}}
                   m = json.dumps(message)
                   sock.sendto(bytes(m,'utf8'), (c[0],c[1]))
 
