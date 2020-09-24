@@ -36,7 +36,7 @@ def cleanClients(sock):
       for c in list(clients.keys()):
          if (datetime.now() - clients[c]['lastBeat']).total_seconds() > 5:
             print('Dropped Client: ', c)
-            message = {"cmd": 3, "Dropped Client ":{"id":str(addr)} }
+            message = {"cmd": 2, "Dropped Client ":{"id":str(addr)} }
             m = json.dumps(message)
             clients_lock.acquire()
             del clients[c]
