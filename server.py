@@ -36,6 +36,10 @@ def cleanClients():
             print('Dropped Client: ', c)
             clients_lock.acquire()
             del clients[c]
+            message = {"cmd": 3,"player":{"id":str(addr)}}
+            m = json.dumps(message)
+            for c in clients:
+               sock.sendto(bytes(m,'utf8'), (c[0],c[1]))
             clients_lock.release()
       time.sleep(1)
 
@@ -59,6 +63,7 @@ def gameLoop(sock):
 
 def main():
    port = 12345
+  
    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
    s.bind(('', port))
    start_new_thread(gameLoop, (s,))
@@ -66,6 +71,8 @@ def main():
    start_new_thread(cleanClients,())
    while True:
       time.sleep(1)
+      
+
 
 if __name__ == '__main__':
    main()
