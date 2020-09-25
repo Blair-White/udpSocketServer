@@ -16,13 +16,15 @@ def connectionLoop(sock):
       data = str(data)
       if addr in clients:
          if 'heartbeat' in data:
-            clients[addr]['lastBeat'] = datetime.now()
+            clients[addr]['lastBeat'] = datetime.now()   
       else:
          if 'connect' in data:
             clients[addr] = {}
             clients[addr]['lastBeat'] = datetime.now()
             clients[addr]['color'] = 0
-            clients[addr]['position'] = {"x": 0, "y": 0, "z": 0}
+            clients[addr]['posX'] = 0
+            clients[addr]['posY'] = 0
+            clients[addr]['posZ'] = 0
             for c in clients:
                message = {"cmd": 0,"player":{"id":str(c)}}
                m = json.dumps(message)
