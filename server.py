@@ -22,8 +22,9 @@ def connectionLoop(sock):
             clients[addr] = {}
             clients[addr]['lastBeat'] = datetime.now()
             clients[addr]['color'] = 0
+            clients[addr]['position'] = {0,0,0}
             for c in clients:
-               message = {"cmd": 0,"player":{"id":str(c)}}
+               message = {"cmd": 0,"player":{"id":str(c)}, "position"}
                m = json.dumps(message)
                sock.sendto(bytes(m,'utf8'), (c[0],c[1]))
 
@@ -57,6 +58,8 @@ def gameLoop(sock):
       for c in clients:
          sock.sendto(bytes(s,'utf8'), (c[0],c[1]))
       clients_lock.release()
+
+      
       time.sleep(1)
 
 def main():
