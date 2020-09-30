@@ -63,8 +63,8 @@ def cleanClients(sock):
             clients_lock.release()  
            
             for cl in list(clients.keys()):
-               message = {"cmd": 2, "Dropped Client ":{"id":str(c)} }
-               m = json.dumps(message)
+               dmessage = {"cmd": 2, "Dropped Client ":{"id":str(c)} }
+               m = json.dumps(dmessage)
                sock.sendto(bytes(m,'utf8'), (cl[0],cl[1]))
               
       time.sleep(1)
