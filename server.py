@@ -13,18 +13,18 @@ clients = {}
 def connectionLoop(sock):
    while True:
       data, addr = sock.recvfrom(1024)
-      data = str(data)
+      dataString = str(data)
       #Send a list of the players connected
       PlayersInGameList = {"cmd": 3, "players": []} 
       if addr in clients:
-         if 'heartbeat' in data:
+         if 'heartbeat' in dataString:
             clients[addr]['lastBeat'] = datetime.now()
          else:#hope this works.
             otherData = json.loads(data)#get the data then store it below in client dict.
             clients[addr]['position'] = otherData['position']
 
       else:
-         if 'connect' in data:
+         if 'connect' in dataString:
             clients[addr] = {}
             clients[addr]['lastBeat'] = datetime.now()
             clients[addr]['color'] = 0
