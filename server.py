@@ -14,20 +14,49 @@ def connectionLoop(sock):
    while True:
       data, addr = sock.recvfrom(1024)
       data = str(data)
+      #Send a list of the players connected
+      PlayersInGameList = {"cmd": 3, "players": []} 
       if addr in clients:
          if 'heartbeat' in data:
-            clients[addr]['lastBeat'] = datetime.now()   
+            clients[addr]['lastBeat'] = datetime.now()
+         else:
+            otherData = json.loads(data)
+            clients[addr]['position'] = {"x": otherData['position']['x'], "y": otherData['position']['y'], "z": otherData['position']['z']} 
+
       else:
          if 'connect' in data:
             clients[addr] = {}
             clients[addr]['lastBeat'] = datetime.now()
             clients[addr]['color'] = 0
+            #add position to this dictionary
+            clients[addr]['position'] = 0
+            #get this connected players id
+            message = {"cmd": 0,"player":{"id":str(c)}}
+            m = json.dumps(message)
             for c in clients:
-               message = {"cmd": 0,"player":{"id":str(c)}}
-               m = json.dumps(message)
+               #send the players id to all players in clients.
                sock.sendto(bytes(m,'utf8'), (c[0],c[1]))
+            
+            #this should all be done in one dictionary, instead of having multiple. 
+            #but im already confused as it is, so we have 2 dictionaries, one is clients
+            #and one is players. 
+               #we need to set the players id in the player dict
+               player = {}#set the new player list
+               player['id'] = str(c)#
+               #and also append this new player to the list of existing players
+               PlayersInGameList['players'].append(player)
+
+            #while running through addr in clients, (line 19)
+            #Create a json dump of our made list of players in the game above
+            #and send it to everyone in clients.
+            sock.sendto(bytes(json.dumps(PlayersInGameList), (addr[0],addr[1])))
+
+
 def cleanClients(sock):
    while True:
+      #a little more straight forward, loop through all the clients,
+      #check for a disconnect, while in that loop, if a disconnection occurs,
+      #loop through all clients and notify them.
       for c in list(clients.keys()):
          if (datetime.now() - clients[c]['lastBeat']).total_seconds() > 5:
             print('Dropped Client: ', c)
@@ -44,10 +73,15 @@ def gameLoop(sock):
    while True:
       GameState = {"cmd": 1, "players": []}
       clients_lock.acquire()
-      print (clients)
+      #print (clients) remove this because its annoying and why would u need
+      #all this data every couple of seconds......
       for c in clients:
          player = {}
          clients[c]['color'] = {"R": random.random(), "G": random.random(), "B": random.random()}
+         #leave color in, might as well. 
+         #but add position by copying the player position to client position
+         #because convoluted = good?
+         player['position'] = clients[c]['position']
          player['id'] = str(c)
          player['color'] = clients[c]['color']
          GameState['players'].append(player)
