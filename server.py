@@ -49,7 +49,7 @@ def connectionLoop(sock):
             #while running through addr in clients, (line 19)
             #Create a json dump of our made list of players in the game above
             #and send it to everyone in clients.
-            sock.sendto(bytes(json.dumps(PlayersInGameList), (addr[0],addr[1])))
+            sock.sendto(bytes(json.dumps(PlayersInGameList), 'utf8'), (addr[0],addr[1]))
 
 
 def cleanClients(sock):
