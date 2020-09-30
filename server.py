@@ -21,7 +21,7 @@ def connectionLoop(sock):
             clients[addr]['lastBeat'] = datetime.now()
          else:#hope this works.
             otherData = json.loads(data)#get the data then store it below in client dict.
-            clients[addr]['position'] = {"x": otherData['position']['x'], "y": otherData['position']['y'], "z": otherData['position']['z']} 
+            clients[addr]['position'] = otherData['position']
 
       else:
          if 'connect' in data:
