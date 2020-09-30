@@ -36,10 +36,7 @@ def connectionLoop(sock):
             for c in clients:
                #send the players id to all players in clients.
                sock.sendto(bytes(m,'utf8'), (c[0],c[1]))
-            
-            #this should all be done in one dictionary, instead of having multiple. 
-            #but im already confused as it is, so we have 2 dictionaries, one is clients
-            #and one is players. 
+             
                #we need to set the players id in the player dict
                player = {}#set the new player list
                player['id'] = str(c)#
