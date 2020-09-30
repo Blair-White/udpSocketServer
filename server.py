@@ -31,7 +31,7 @@ def connectionLoop(sock):
             #add position to this dictionary
             clients[addr]['position'] = 0
             #get this connected players id
-            message = {"cmd": 0,"player":{"id":str(c)}}
+            message = {"cmd": 0,"player":{"id":str(addr)}}
             m = json.dumps(message)
             for c in clients:
                #send the players id to all players in clients.
